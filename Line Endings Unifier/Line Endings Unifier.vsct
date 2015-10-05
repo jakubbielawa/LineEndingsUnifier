@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="guidLine_Endings_UnifierPkg">
+    <Groups>
+      <Group guid="guidLine_Endings_UnifierCmdSet_File" id="MenuGroup_File" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+      </Group>
+
+      <Group guid="guidLine_Endings_UnifierCmdSet_Folder" id="MenuGroup_Folder" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE"/>
+      </Group>
+        
+      <Group guid="guidLine_Endings_UnifierCmdSet_Project" id="MenuGroup_Project" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE"/>
+      </Group>
+
+      <Group guid="guidLine_Endings_UnifierCmdSet_Solution" id="MenuGroup_Solution" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE"/>
+      </Group>
+    </Groups>
+    
+    <Buttons>
+      <Button guid="guidLine_Endings_UnifierCmdSet_File" id="cmdidUnifyLineEndings_File" priority="0x0500" type="Button">
+        <Parent guid="guidLine_Endings_UnifierCmdSet_File" id="MenuGroup_File" />
+        <Strings>
+          <ButtonText>Unify Line Endings In This File</ButtonText>
+        </Strings>
+      </Button>
+      
+      <Button guid="guidLine_Endings_UnifierCmdSet_Folder" id="cmdidUnifyLineEndings_Folder" priority="0x0500" type="Button">
+        <Parent guid="guidLine_Endings_UnifierCmdSet_Folder" id="MenuGroup_Folder" />
+        <Strings>
+          <ButtonText>Unify Line Endings In This Folder</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLine_Endings_UnifierCmdSet_Project" id="cmdidUnifyLineEndings_Project" priority="0x0500" type="Button">
+        <Parent guid="guidLine_Endings_UnifierCmdSet_Project" id="MenuGroup_Project" />
+        <Strings>
+          <ButtonText>Unify Line Endings In This Project</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLine_Endings_UnifierCmdSet_Solution" id="cmdidUnifyLineEndings_Solution" priority="0x0500" type="Button">
+        <Parent guid="guidLine_Endings_UnifierCmdSet_Solution" id="MenuGroup_Solution" />
+        <Strings>
+          <ButtonText>Unify Line Endings In This Solution</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="guidLine_Endings_UnifierPkg" value="{1ce34aed-d80b-4e02-afc9-bd0bd3848443}" />
+    
+    <GuidSymbol name="guidLine_Endings_UnifierCmdSet_File" value="{e65fc73a-f162-437e-a8b4-b7e3469d83cb}">
+      <IDSymbol name="MenuGroup_File" value="0x1020" />
+      <IDSymbol name="cmdidUnifyLineEndings_File" value="0x0100" />
+    </GuidSymbol>
+    
+    <GuidSymbol name="guidLine_Endings_UnifierCmdSet_Folder" value="{078bdabd-c25e-49b8-acab-61655b84573f}">
+      <IDSymbol name="MenuGroup_Folder" value="0x1020" />
+      <IDSymbol name="cmdidUnifyLineEndings_Folder" value="0x0101" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidLine_Endings_UnifierCmdSet_Project" value="{c79636f0-0d76-41a1-80bf-feee33bf0ac9}">
+      <IDSymbol name="MenuGroup_Project" value="0x1020" />
+      <IDSymbol name="cmdidUnifyLineEndings_Project" value="0x0102" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidLine_Endings_UnifierCmdSet_Solution" value="{6087fbf4-4264-4a5c-a6d3-d21859ac5ad2}">
+      <IDSymbol name="MenuGroup_Solution" value="0x1020" />
+      <IDSymbol name="cmdidUnifyLineEndings_Solution" value="0x0103" />
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>
