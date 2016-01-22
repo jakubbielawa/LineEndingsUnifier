@@ -27,6 +27,7 @@
     <Buttons>
       <Button guid="guidLine_Endings_UnifierCmdSet_File" id="cmdidUnifyLineEndings_File" priority="0x0500" type="Button">
         <Parent guid="guidLine_Endings_UnifierCmdSet_File" id="MenuGroup_File" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Unify Line Endings In This File</ButtonText>
         </Strings>
@@ -34,6 +35,7 @@
       
       <Button guid="guidLine_Endings_UnifierCmdSet_Folder" id="cmdidUnifyLineEndings_Folder" priority="0x0500" type="Button">
         <Parent guid="guidLine_Endings_UnifierCmdSet_Folder" id="MenuGroup_Folder" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Unify Line Endings In This Folder</ButtonText>
         </Strings>
@@ -41,6 +43,7 @@
 
       <Button guid="guidLine_Endings_UnifierCmdSet_Project" id="cmdidUnifyLineEndings_Project" priority="0x0500" type="Button">
         <Parent guid="guidLine_Endings_UnifierCmdSet_Project" id="MenuGroup_Project" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Unify Line Endings In This Project</ButtonText>
         </Strings>
@@ -48,6 +51,7 @@
 
       <Button guid="guidLine_Endings_UnifierCmdSet_Solution" id="cmdidUnifyLineEndings_Solution" priority="0x0500" type="Button">
         <Parent guid="guidLine_Endings_UnifierCmdSet_Solution" id="MenuGroup_Solution" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Unify Line Endings In This Solution</ButtonText>
         </Strings>
