@@ -13,6 +13,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private bool forceDefaultLineEndingOnSave = false;
         private string supportedFileFormats = ".cpp; .c; .h; .hpp; .cs; .js; .vb; .txt";
         private bool saveFilesAfterUnifying = false;
+        private bool writeReport = false;
 
         [Category("Line Endings Unifier")]
         [DisplayName("Default Line Ending")]
@@ -48,6 +49,15 @@ namespace JakubBielawa.LineEndingsUnifier
         {
             get { return saveFilesAfterUnifying; }
             set { saveFilesAfterUnifying = value; }
+        }
+
+        [Category("Line Endings Unifier")]
+        [DisplayName("Write Report To The Output Window")]
+        [Description("Set this to TRUE if you want the extension to write a report in the Output window")]
+        public bool WriteReport
+        {
+            get { return writeReport; }
+            set { writeReport = value; }
         }
     }
 }

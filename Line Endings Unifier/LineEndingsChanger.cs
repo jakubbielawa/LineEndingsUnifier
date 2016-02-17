@@ -20,12 +20,14 @@ namespace JakubBielawa.LineEndingsUnifier
             Macintosh
         }
 
-        public static string ChangeLineEndings(string line, LineEndings lineEndings, ref int numberOfChanges)
+        public static string ChangeLineEndings(string line, LineEndings lineEndings, ref int numberOfChanges, out int numberOfIndividualChanges)
         {
+            numberOfIndividualChanges = 0;
+
             switch (lineEndings)
             {
                 case LineEndings.Linux:
-                    numberOfChanges += line.Count(x => x == '\r');
+                    numberOfIndividualChanges += line.Count(x => x == '\r');
                     line = line.Replace("\r\n", "\n").Replace('\r', '\n');
                     break;
                 case LineEndings.Windows:
@@ -35,29 +37,31 @@ namespace JakubBielawa.LineEndingsUnifier
                         {
                             if (i < line.Length - 1 && line[i + 1] != '\n')
                             {
-                                numberOfChanges++;
+                                numberOfIndividualChanges++;
                                 line = line.Insert(i + 1, "\n");
                                 i++;
                             }
                             else if (i == line.Length - 1)
                             {
-                                numberOfChanges++;
+                                numberOfIndividualChanges++;
                                 line = line.Insert(i + 1, "\n");
                             }
                         }
                         else if (line[i] == '\n' && i > 0 && line[i - 1] != '\r')
                         {
-                            numberOfChanges++;
+                            numberOfIndividualChanges++;
                             line = line.Insert(i, "\r");
                             i++;
                         }
                     }
                     break;
                 case LineEndings.Macintosh:
-                    numberOfChanges += line.Count(x => x == '\n');
+                    numberOfIndividualChanges += line.Count(x => x == '\n');
                     line = line.Replace("\r\n", "\r").Replace('\n', '\r');
                     break;
             }
+
+            numberOfChanges += numberOfIndividualChanges;
 
             return line;
         }
