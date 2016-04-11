@@ -86,7 +86,7 @@ namespace JakubBielawa.LineEndingsUnifier
                     }
                     break;
                 case VSConstants.VSStd97CmdID.SaveSolution:
-                    if (this.OptionsPage.ForceDefaultLineEndingOnSave)
+                    if (this.OptionsPage.ForceDefaultLineEndingOnSave && this.OptionsPage.UnifyFilesInSolutionOnSave)
                     {
                         UnifyLineEndingsInSolution(false);
                     }

@@ -13,6 +13,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private bool forceDefaultLineEndingOnSave = false;
         private string supportedFileFormats = ".cpp; .c; .h; .hpp; .cs; .js; .vb; .txt";
         private bool saveFilesAfterUnifying = false;
+        private bool unifyFilesInSolutionOnSave = true;
         private bool writeReport = false;
 
         [Category("Line Endings Unifier")]
@@ -49,6 +50,15 @@ namespace JakubBielawa.LineEndingsUnifier
         {
             get { return saveFilesAfterUnifying; }
             set { saveFilesAfterUnifying = value; }
+        }
+
+        [Category("Line Endings Unifier")]
+        [DisplayName("Unify Files In Solution On Save")]
+        [Description("When you click the \"Save All\" or \"Save Solution\" button, all files in the solution will have their line endings unified.")]
+        public bool UnifyFilesInSolutionOnSave
+        {
+            get { return unifyFilesInSolutionOnSave; }
+            set { unifyFilesInSolutionOnSave = value; }
         }
 
         [Category("Line Endings Unifier")]
