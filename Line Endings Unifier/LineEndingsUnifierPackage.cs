@@ -238,7 +238,7 @@ namespace JakubBielawa.LineEndingsUnifier
                         int numberOfChanges = 0;
                         foreach (Project project in currentSolution.Projects)
                         {
-                            UnifyLineEndingsInProjectItems(project.ProjectItems, lineEndings, ref numberOfChanges);
+                            UnifyLineEndingsInProjectItems(project.ProjectItems, lineEndings, ref numberOfChanges, true);
                         }
                         Output("Done\n");
                     }
@@ -247,7 +247,7 @@ namespace JakubBielawa.LineEndingsUnifier
             }
         }
 
-        private void UnifyLineEndingsInProjectItems(ProjectItems projectItems, LineEndingsChanger.LineEndings lineEndings, ref int numberOfChanges)
+        private void UnifyLineEndingsInProjectItems(ProjectItems projectItems, LineEndingsChanger.LineEndings lineEndings, ref int numberOfChanges, bool saveAllWasHit = false)
         {
             var supportedFileFormats = this.SupportedFileFormats;
 
@@ -255,26 +255,30 @@ namespace JakubBielawa.LineEndingsUnifier
             {
                 if (item.ProjectItems != null && item.ProjectItems.Count > 0)
                 {
-                    UnifyLineEndingsInProjectItems(item.ProjectItems, lineEndings, ref numberOfChanges);
+                    UnifyLineEndingsInProjectItems(item.ProjectItems, lineEndings, ref numberOfChanges, saveAllWasHit);
                 }
                 else
                 {
                     if (item.Name.EndsWithAny(supportedFileFormats))
                     {
-                        UnifyLineEndingsInProjectItem(item, lineEndings, ref numberOfChanges);
+                        UnifyLineEndingsInProjectItem(item, lineEndings, ref numberOfChanges, saveAllWasHit);
                     }
                 }
             }
         }
 
-        private void UnifyLineEndingsInProjectItem(ProjectItem item, LineEndingsChanger.LineEndings lineEndings, ref int numberOfChanges)
+        private void UnifyLineEndingsInProjectItem(ProjectItem item, LineEndingsChanger.LineEndings lineEndings, ref int numberOfChanges, bool saveAllWasHit = false)
         {
             Window documentWindow = null;
 
             if (!item.IsOpen)
             {
-                documentWindow = item.Open();
+                if (!saveAllWasHit || (saveAllWasHit && !this.OptionsPage.UnifyOnlyOpenFiles))
+                {
+                    documentWindow = item.Open();
+                }
             }
+
             var document = item.Document;
             if (document != null)
             {

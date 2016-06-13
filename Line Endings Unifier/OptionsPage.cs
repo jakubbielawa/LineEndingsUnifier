@@ -14,6 +14,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private string supportedFileFormats = ".cpp; .c; .h; .hpp; .cs; .js; .vb; .txt";
         private bool saveFilesAfterUnifying = false;
         private bool writeReport = false;
+        private bool unifyOnlyOpenFiles = false;
 
         [Category("Line Endings Unifier")]
         [DisplayName("Default Line Ending")]
@@ -58,6 +59,15 @@ namespace JakubBielawa.LineEndingsUnifier
         {
             get { return writeReport; }
             set { writeReport = value; }
+        }
+
+        [Category("Line Endings Unifier")]
+        [DisplayName("Unify Only Open Files On Save All")]
+        [Description("Set this to TRUE if you want the extension to unify only files that are open in the editor after hitting \"Save All\"")]
+        public bool UnifyOnlyOpenFiles
+        {
+            get { return unifyOnlyOpenFiles; }
+            set { unifyOnlyOpenFiles = value; }
         }
     }
 }
