@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace JakubBielawa.LineEndingsUnifier
 {
@@ -20,50 +21,46 @@ namespace JakubBielawa.LineEndingsUnifier
             Macintosh
         }
 
-        public static string ChangeLineEndings(string line, LineEndings lineEndings, ref int numberOfChanges, out int numberOfIndividualChanges)
+        private const string LineEndingsPattern = "\r\n?|\n";
+
+        private const string WindowsLineEndings = "\r\n";
+
+        private const string LinuxLineEndings = "\n";
+
+        private const string MacintoshLineEndings = "\r";
+
+        public static string ChangeLineEndings(string text, LineEndings lineEndings, ref int numberOfChanges, out int numberOfIndividualChanges)
         {
             numberOfIndividualChanges = 0;
+
+            string replacementString = string.Empty;
 
             switch (lineEndings)
             {
                 case LineEndings.Linux:
-                    numberOfIndividualChanges += line.Count(x => x == '\r');
-                    line = line.Replace("\r\n", "\n").Replace('\r', '\n');
+                    replacementString = LinuxLineEndings;
                     break;
                 case LineEndings.Windows:
-                    for (int i = 0; i < line.Length; i++)
-                    {
-                        if (line[i] == '\r')
-                        {
-                            if (i < line.Length - 1 && line[i + 1] != '\n')
-                            {
-                                numberOfIndividualChanges++;
-                                line = line.Insert(i + 1, "\n");
-                                i++;
-                            }
-                            else if (i == line.Length - 1)
-                            {
-                                numberOfIndividualChanges++;
-                                line = line.Insert(i + 1, "\n");
-                            }
-                        }
-                        else if (line[i] == '\n' && i > 0 && line[i - 1] != '\r')
-                        {
-                            numberOfIndividualChanges++;
-                            line = line.Insert(i, "\r");
-                            i++;
-                        }
-                    }
+                    replacementString = WindowsLineEndings;
                     break;
                 case LineEndings.Macintosh:
-                    numberOfIndividualChanges += line.Count(x => x == '\n');
-                    line = line.Replace("\r\n", "\r").Replace('\n', '\r');
+                    replacementString = MacintoshLineEndings;
                     break;
             }
 
+            int changesCount = 0;
+
+            string modifiedText = Regex.Replace(text, LineEndingsPattern,
+                (match) =>
+                {
+                    changesCount++;
+                    return match.Result(replacementString);
+                });
+
+            numberOfIndividualChanges = changesCount;
             numberOfChanges += numberOfIndividualChanges;
 
-            return line;
+            return modifiedText;
         }
     }
 }
