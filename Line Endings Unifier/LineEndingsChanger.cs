@@ -11,6 +11,7 @@ namespace JakubBielawa.LineEndingsUnifier
             Windows,
             Linux,
             Macintosh,
+            Dominant,
             None
         }
 
@@ -18,7 +19,8 @@ namespace JakubBielawa.LineEndingsUnifier
         {
             Windows,
             Linux,
-            Macintosh
+            Macintosh,
+            Dominant
         }
 
         private const string LineEndingsPattern = "\r\n?|\n";
@@ -45,6 +47,25 @@ namespace JakubBielawa.LineEndingsUnifier
                     break;
                 case LineEndings.Macintosh:
                     replacementString = MacintoshLineEndings;
+                    break;
+                case LineEndings.Dominant:
+                    var numberOfWindowsLineEndings = Regex.Matches(text, WindowsLineEndings).Count;
+                    var numberOfLinuxLineEndings = Regex.Matches(text, "\n").Count - numberOfWindowsLineEndings;
+                    var numberOfMacintoshLineEndings = Regex.Matches(text, "\r").Count - numberOfWindowsLineEndings;
+
+                    if (numberOfWindowsLineEndings > numberOfLinuxLineEndings && numberOfWindowsLineEndings > numberOfMacintoshLineEndings)
+                    {
+                        replacementString = WindowsLineEndings;
+                    }
+                    else if (numberOfLinuxLineEndings > numberOfWindowsLineEndings && numberOfLinuxLineEndings > numberOfMacintoshLineEndings)
+                    {
+                        replacementString = LinuxLineEndings;
+                    }
+                    else
+                    {
+                        replacementString = MacintoshLineEndings;
+                    }
+
                     break;
             }
 
