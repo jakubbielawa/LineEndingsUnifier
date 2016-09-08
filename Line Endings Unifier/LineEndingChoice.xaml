@@ -1,7 +1,7 @@
 ﻿<Window x:Class="JakubBielawa.LineEndingsUnifier.LineEndingChoice"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="LineEndingChoice" Height="190" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="LineEndingChoice" Height="210" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel Orientation="Vertical">
             <TextBlock Text="Choose line endings to insert:" Margin="10,10,0,0"/>
@@ -10,6 +10,7 @@
                     <RadioButton Name="Windows_RadioButton" Content="Windows (CR LF)" Checked="RadioButton_Checked" Margin="10,10,0,0"/>
                     <RadioButton Name="Linux_RadioButton" Content="Linux (LF)" Checked="RadioButton_Checked" Margin="10,5,0,0"/>
                     <RadioButton Name="Macintosh_RadioButton" Content="Macintosh (CR)" Checked="RadioButton_Checked" Margin="10,5,0,0"/>
+                    <RadioButton Name="Dominant_RadioButton" Content="Dominant" Checked="RadioButton_Checked" Margin="10,5,0,0"/>
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">

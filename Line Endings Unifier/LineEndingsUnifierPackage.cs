@@ -106,7 +106,7 @@ namespace JakubBielawa.LineEndingsUnifier
             var selectedItem = this.IDE.SelectedItems.Item(1);
             var item = selectedItem.ProjectItem;
 
-            var choiceWindow = new LineEndingChoice(item.Name);
+            var choiceWindow = new LineEndingChoice(item.Name, this.DefaultLineEnding);
             if (choiceWindow.ShowDialog() == true && choiceWindow.LineEndings != LineEndingsChanger.LineEndings.None)
             {
                 var supportedFileFormats = this.SupportedFileFormats;
@@ -145,7 +145,7 @@ namespace JakubBielawa.LineEndingsUnifier
             var selectedItem = IDE.SelectedItems.Item(1);
             var projectItem = selectedItem.ProjectItem;
 
-            var choiceWindow = new LineEndingChoice(selectedItem.Name);
+            var choiceWindow = new LineEndingChoice(selectedItem.Name, this.DefaultLineEnding);
             if (choiceWindow.ShowDialog() == true && choiceWindow.LineEndings != LineEndingsChanger.LineEndings.None)
             {
                 System.Threading.Tasks.Task.Run(() =>
@@ -174,7 +174,7 @@ namespace JakubBielawa.LineEndingsUnifier
             var selectedItem = this.IDE.SelectedItems.Item(1);
             var selectedProject = selectedItem.Project;
 
-            var choiceWindow = new LineEndingChoice(selectedProject.Name);
+            var choiceWindow = new LineEndingChoice(selectedProject.Name, this.DefaultLineEnding);
             if (choiceWindow.ShowDialog() == true && choiceWindow.LineEndings != LineEndingsChanger.LineEndings.None)
             {
                 System.Threading.Tasks.Task.Run(() =>
@@ -209,7 +209,7 @@ namespace JakubBielawa.LineEndingsUnifier
                 {
                     if (askForLineEnding)
                     {
-                        var choiceWindow = new LineEndingChoice((property as Property).Value.ToString());
+                        var choiceWindow = new LineEndingChoice((property as Property).Value.ToString(), this.DefaultLineEnding);
                         if (choiceWindow.ShowDialog() == true && choiceWindow.LineEndings != LineEndingsChanger.LineEndings.None)
                         {
                             System.Threading.Tasks.Task.Run(() =>
@@ -278,7 +278,7 @@ namespace JakubBielawa.LineEndingsUnifier
                     documentWindow = item.Open();
                 }
             }
-
+            
             var document = item.Document;
             if (document != null)
             {

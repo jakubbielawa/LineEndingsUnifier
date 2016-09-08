@@ -12,10 +12,28 @@ namespace JakubBielawa.LineEndingsUnifier
             InitializeComponent();
         }
 
-        public LineEndingChoice(string fileName)
+        public LineEndingChoice(string fileName, LineEndingsChanger.LineEndings defaultLineEnding)
         {
             InitializeComponent();
             this.Title = fileName;
+
+            switch (defaultLineEnding)
+            {
+                case LineEndingsChanger.LineEndings.Dominant:
+                    this.Dominant_RadioButton.IsChecked = true;
+                    break;
+                case LineEndingsChanger.LineEndings.Linux:
+                    this.Linux_RadioButton.IsChecked = true;
+                    break;
+                case LineEndingsChanger.LineEndings.Macintosh:
+                    this.Macintosh_RadioButton.IsChecked = true;
+                    break;
+                case LineEndingsChanger.LineEndings.Windows:
+                    this.Windows_RadioButton.IsChecked = true;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public LineEndingsChanger.LineEndings LineEndings
@@ -41,6 +59,10 @@ namespace JakubBielawa.LineEndingsUnifier
             else if (button.Content.ToString().Contains("Macintosh"))
             {
                 this.lineEndings = LineEndingsChanger.LineEndings.Macintosh;
+            }
+            else if (button.Content.ToString().Contains("Dominant"))
+            {
+                this.lineEndings = LineEndingsChanger.LineEndings.Dominant;
             }
             else
             {
