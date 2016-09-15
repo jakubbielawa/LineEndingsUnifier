@@ -12,6 +12,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private LineEndingsChanger.LineEndingsList defaultLineEnding = LineEndingsChanger.LineEndingsList.Windows;
         private bool forceDefaultLineEndingOnSave = false;
         private string supportedFileFormats = ".cpp; .c; .h; .hpp; .cs; .js; .vb; .txt";
+        private string supportedFileNames = "Dockerfile";
         private bool saveFilesAfterUnifying = false;
         private bool writeReport = false;
         private bool unifyOnlyOpenFiles = false;
@@ -41,6 +42,15 @@ namespace JakubBielawa.LineEndingsUnifier
         {
             get { return supportedFileFormats; }
             set { supportedFileFormats = value; }
+        }
+
+        [Category("Line Endings Unifier")]
+        [DisplayName("Supported File Names")]
+        [Description("Files with these names will have line endings unified")]
+        public string SupportedFileNames
+        {
+            get { return supportedFileNames; }
+            set { supportedFileNames = value; }
         }
 
         [Category("Line Endings Unifier")]

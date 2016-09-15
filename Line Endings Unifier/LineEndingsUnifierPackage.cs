@@ -74,8 +74,9 @@ namespace JakubBielawa.LineEndingsUnifier
                         var tmp = 0;
 
                         var supportedFileFormats = this.SupportedFileFormats;
+                        var supportedFileNames = this.SupportedFileNames;
 
-                        if (currentDocument.Name.EndsWithAny(supportedFileFormats))
+                        if (currentDocument.Name.EndsWithAny(supportedFileFormats) || currentDocument.Name.EqualsAny(supportedFileNames))
                         {
                             var numberOfIndividualChanges = 0;
                             Output("Unifying started...\n");
@@ -110,8 +111,9 @@ namespace JakubBielawa.LineEndingsUnifier
             if (choiceWindow.ShowDialog() == true && choiceWindow.LineEndings != LineEndingsChanger.LineEndings.None)
             {
                 var supportedFileFormats = this.SupportedFileFormats;
+                var supportedFileNames = this.SupportedFileNames;
 
-                if (item.Name.EndsWithAny(supportedFileFormats))
+                if (item.Name.EndsWithAny(supportedFileFormats) || item.Name.EqualsAny(supportedFileNames))
                 {
                     System.Threading.Tasks.Task.Run(() =>
                         {
@@ -250,6 +252,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private void UnifyLineEndingsInProjectItems(ProjectItems projectItems, LineEndingsChanger.LineEndings lineEndings, ref int numberOfChanges, bool saveAllWasHit = false)
         {
             var supportedFileFormats = this.SupportedFileFormats;
+            var supportedFileNames = this.SupportedFileNames;
 
             foreach (ProjectItem item in projectItems)
             {
@@ -259,7 +262,7 @@ namespace JakubBielawa.LineEndingsUnifier
                 }
                 else
                 {
-                    if (item.Name.EndsWithAny(supportedFileFormats))
+                    if (item.Name.EndsWithAny(supportedFileFormats) || item.Name.EqualsAny(supportedFileNames))
                     {
                         UnifyLineEndingsInProjectItem(item, lineEndings, ref numberOfChanges, saveAllWasHit);
                     }
@@ -343,6 +346,11 @@ namespace JakubBielawa.LineEndingsUnifier
         private string[] SupportedFileFormats
         {
             get { return this.OptionsPage.SupportedFileFormats.Replace(" ", string.Empty).Split(new[] { ';' }); }
+        }
+
+        private string[] SupportedFileNames
+        {
+            get { return this.OptionsPage.SupportedFileNames.Replace(" ", string.Empty).Split(new[] { ';' }); }
         }
 
         private OptionsPage optionsPage;

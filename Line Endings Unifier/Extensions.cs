@@ -19,6 +19,18 @@ namespace JakubBielawa.LineEndingsUnifier
             return false;
         }
 
+        public static bool EqualsAny(this string str, string[] strings)
+        {
+            foreach (var s in strings)
+            {
+                if (str.Equals(s))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static IList<Project> GetAllProjects(this Solution solution)
         {
             Projects projects = solution.Projects;

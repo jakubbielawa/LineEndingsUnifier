@@ -2,7 +2,7 @@
   <Identifier Id="1ce34aed-d80b-4e02-afc9-bd0bd3848443">
     <Name>Line Endings Unifier</Name>
     <Author>Jakub Bielawa</Author>
-    <Version>1.4.5</Version>
+    <Version>1.4.6</Version>
     <Description xml:space="preserve">Unify line endings in a whole solution, a specific project, a chosen folder or a certain source file by right clicking on a solution, a project or a file in the Solution Explorer.</Description>
     <License>license.txt</License>
     <Locale>1033</Locale>
