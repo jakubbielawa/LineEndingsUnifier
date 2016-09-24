@@ -28,6 +28,10 @@ namespace JakubBielawa.LineEndingsUnifier
 
             commandEvents = IDE.Events.CommandEvents;
             commandEvents.BeforeExecute += commandEvents_BeforeExecute;
+            commandEvents.AfterExecute += commandEvents_AfterExecute;
+
+            documentEvents = IDE.Events.DocumentEvents;
+            documentEvents.DocumentSaved += documentEvents_DocumentSaved;
 
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if ( null != mcs )
@@ -63,37 +67,66 @@ namespace JakubBielawa.LineEndingsUnifier
         void commandEvents_BeforeExecute(string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault)
         {
             var command = (VSConstants.VSStd97CmdID)ID;
+
             switch (command)
             {
-                case VSConstants.VSStd97CmdID.SaveProjectItem:
-                    if (this.OptionsPage.ForceDefaultLineEndingOnSave)
-                    {
-                        var currentDocument = this.IDE.ActiveDocument;
-                        var textDocument = currentDocument.Object("TextDocument") as TextDocument;
-                        var lineEndings = this.DefaultLineEnding;
-                        var tmp = 0;
-
-                        var supportedFileFormats = this.SupportedFileFormats;
-                        var supportedFileNames = this.SupportedFileNames;
-
-                        if (currentDocument.Name.EndsWithAny(supportedFileFormats) || currentDocument.Name.EqualsAny(supportedFileNames))
-                        {
-                            var numberOfIndividualChanges = 0;
-                            Output("Unifying started...\n");
-                            UnifyLineEndingsInDocument(textDocument, lineEndings, ref tmp, out numberOfIndividualChanges);
-                            Output(string.Format("{0}: changed {1} line endings\n", currentDocument.FullName, numberOfIndividualChanges));
-                            Output("Done\n");
-                        }
-                    }
-                    break;
                 case VSConstants.VSStd97CmdID.SaveSolution:
+                case VSConstants.VSStd97CmdID.BuildSln:
+                case VSConstants.VSStd97CmdID.BuildCtx:
                     if (this.OptionsPage.ForceDefaultLineEndingOnSave)
                     {
+                        this.isUnifyingLocked = true;
                         UnifyLineEndingsInSolution(false);
                     }
                     break;
                 default:
                     break;
+            }
+        }
+
+        void commandEvents_AfterExecute(string Guid, int ID, object CustomIn, object CustomOut)
+        {
+            var command = (VSConstants.VSStd97CmdID)ID;
+
+            switch (command)
+            {
+                case VSConstants.VSStd97CmdID.SaveSolution:
+                case VSConstants.VSStd97CmdID.BuildSln:
+                case VSConstants.VSStd97CmdID.BuildCtx:
+                    this.isUnifyingLocked = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        void documentEvents_DocumentSaved(Document document)
+        {
+            if (!this.isUnifyingLocked)
+            {
+                if (this.OptionsPage.ForceDefaultLineEndingOnSave)
+                {
+                    var currentDocument = document;
+                    var textDocument = currentDocument.Object("TextDocument") as TextDocument;
+                    var lineEndings = this.DefaultLineEnding;
+                    var tmp = 0;
+
+                    var supportedFileFormats = this.SupportedFileFormats;
+                    var supportedFileNames = this.SupportedFileNames;
+
+                    if (currentDocument.Name.EndsWithAny(supportedFileFormats) || currentDocument.Name.EqualsAny(supportedFileNames))
+                    {
+                        var numberOfIndividualChanges = 0;
+                        Output("Unifying started...\n");
+                        UnifyLineEndingsInDocument(textDocument, lineEndings, ref tmp, out numberOfIndividualChanges);
+                        Output(string.Format("{0}: changed {1} line endings\n", currentDocument.FullName, numberOfIndividualChanges));
+                        Output("Done\n");
+                    }
+
+                    this.isUnifyingLocked = true;
+                    document.Save();
+                    this.isUnifyingLocked = false;
+                }
             }
         }
 
@@ -283,7 +316,7 @@ namespace JakubBielawa.LineEndingsUnifier
             }
             
             var document = item.Document;
-            if (document != null)
+            if (document != null) 
             {
                 var numberOfIndividualChanges = 0;
 
@@ -291,7 +324,9 @@ namespace JakubBielawa.LineEndingsUnifier
                 UnifyLineEndingsInDocument(textDocument, lineEndings, ref numberOfChanges, out numberOfIndividualChanges);
                 if (this.OptionsPage.SaveFilesAfterUnifying)
                 {
+                    this.isUnifyingLocked = true;
                     document.Save();
+                    this.isUnifyingLocked = false;
                 }
 
                 Output(string.Format("{0}: changed {1} line endings\n", document.FullName, numberOfIndividualChanges));
@@ -332,11 +367,15 @@ namespace JakubBielawa.LineEndingsUnifier
             }
         }
 
+        private bool isUnifyingLocked = false;
+
         private IVsOutputWindow outputWindow;
 
         private Guid guid;
 
         private CommandEvents commandEvents;
+
+        private DocumentEvents documentEvents;
 
         private LineEndingsChanger.LineEndings DefaultLineEnding
         {
