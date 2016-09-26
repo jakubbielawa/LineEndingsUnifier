@@ -26,10 +26,6 @@ namespace JakubBielawa.LineEndingsUnifier
         {
             base.Initialize();
 
-            commandEvents = IDE.Events.CommandEvents;
-            commandEvents.BeforeExecute += commandEvents_BeforeExecute;
-            commandEvents.AfterExecute += commandEvents_AfterExecute;
-
             documentEvents = IDE.Events.DocumentEvents;
             documentEvents.DocumentSaved += documentEvents_DocumentSaved;
 
@@ -62,42 +58,6 @@ namespace JakubBielawa.LineEndingsUnifier
             }
 
             SetupOutputWindow();
-        }
-
-        void commandEvents_BeforeExecute(string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault)
-        {
-            var command = (VSConstants.VSStd97CmdID)ID;
-
-            switch (command)
-            {
-                case VSConstants.VSStd97CmdID.SaveSolution:
-                case VSConstants.VSStd97CmdID.BuildSln:
-                case VSConstants.VSStd97CmdID.BuildCtx:
-                    if (this.OptionsPage.ForceDefaultLineEndingOnSave)
-                    {
-                        this.isUnifyingLocked = true;
-                        UnifyLineEndingsInSolution(false);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        void commandEvents_AfterExecute(string Guid, int ID, object CustomIn, object CustomOut)
-        {
-            var command = (VSConstants.VSStd97CmdID)ID;
-
-            switch (command)
-            {
-                case VSConstants.VSStd97CmdID.SaveSolution:
-                case VSConstants.VSStd97CmdID.BuildSln:
-                case VSConstants.VSStd97CmdID.BuildCtx:
-                    this.isUnifyingLocked = false;
-                    break;
-                default:
-                    break;
-            }
         }
 
         void documentEvents_DocumentSaved(Document document)
@@ -372,8 +332,6 @@ namespace JakubBielawa.LineEndingsUnifier
         private IVsOutputWindow outputWindow;
 
         private Guid guid;
-
-        private CommandEvents commandEvents;
 
         private DocumentEvents documentEvents;
 
