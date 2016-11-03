@@ -31,54 +31,53 @@ namespace JakubBielawa.LineEndingsUnifier
 
         private const string MacintoshLineEndings = "\r";
 
-        public static string ChangeLineEndings(string text, LineEndings lineEndings, ref int numberOfChanges, out int numberOfIndividualChanges)
+        public static string ChangeLineEndings(string text, LineEndings lineEndings, ref int numberOfChanges, out int numberOfIndividualChanges, out int numberOfAllLineEndings)
         {
             numberOfIndividualChanges = 0;
 
             string replacementString = string.Empty;
 
+            numberOfAllLineEndings = Regex.Matches(text, LineEndingsPattern).Count;
+            var numberOfWindowsLineEndings = Regex.Matches(text, WindowsLineEndings).Count;
+            var numberOfLinuxLineEndings = Regex.Matches(text, LinuxLineEndings).Count - numberOfWindowsLineEndings;
+            var numberOfMacintoshLineEndings = Regex.Matches(text, MacintoshLineEndings).Count - numberOfWindowsLineEndings;
+
             switch (lineEndings)
             {
                 case LineEndings.Linux:
                     replacementString = LinuxLineEndings;
+                    numberOfIndividualChanges = numberOfWindowsLineEndings + numberOfMacintoshLineEndings;
                     break;
                 case LineEndings.Windows:
                     replacementString = WindowsLineEndings;
+                    numberOfIndividualChanges = numberOfLinuxLineEndings + numberOfMacintoshLineEndings;
                     break;
                 case LineEndings.Macintosh:
                     replacementString = MacintoshLineEndings;
+                    numberOfIndividualChanges = numberOfWindowsLineEndings + numberOfLinuxLineEndings;
                     break;
                 case LineEndings.Dominant:
-                    var numberOfWindowsLineEndings = Regex.Matches(text, WindowsLineEndings).Count;
-                    var numberOfLinuxLineEndings = Regex.Matches(text, "\n").Count - numberOfWindowsLineEndings;
-                    var numberOfMacintoshLineEndings = Regex.Matches(text, "\r").Count - numberOfWindowsLineEndings;
-
                     if (numberOfWindowsLineEndings > numberOfLinuxLineEndings && numberOfWindowsLineEndings > numberOfMacintoshLineEndings)
                     {
                         replacementString = WindowsLineEndings;
+                        numberOfIndividualChanges = numberOfLinuxLineEndings + numberOfMacintoshLineEndings;
                     }
                     else if (numberOfLinuxLineEndings > numberOfWindowsLineEndings && numberOfLinuxLineEndings > numberOfMacintoshLineEndings)
                     {
                         replacementString = LinuxLineEndings;
+                        numberOfIndividualChanges = numberOfWindowsLineEndings + numberOfMacintoshLineEndings;
                     }
                     else
                     {
                         replacementString = MacintoshLineEndings;
+                        numberOfIndividualChanges = numberOfWindowsLineEndings + numberOfLinuxLineEndings;
                     }
 
                     break;
             }
 
-            int changesCount = 0;
+            string modifiedText = Regex.Replace(text, LineEndingsPattern, replacementString);
 
-            string modifiedText = Regex.Replace(text, LineEndingsPattern,
-                (match) =>
-                {
-                    changesCount++;
-                    return match.Result(replacementString);
-                });
-
-            numberOfIndividualChanges = changesCount;
             numberOfChanges += numberOfIndividualChanges;
 
             return modifiedText;

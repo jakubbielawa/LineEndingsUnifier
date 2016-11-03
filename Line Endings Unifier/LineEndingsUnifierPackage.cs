@@ -77,9 +77,10 @@ namespace JakubBielawa.LineEndingsUnifier
                     if (currentDocument.Name.EndsWithAny(supportedFileFormats) || currentDocument.Name.EqualsAny(supportedFileNames))
                     {
                         var numberOfIndividualChanges = 0;
+                        var numberOfAllLineEndings = 0;
                         Output("Unifying started...\n");
-                        UnifyLineEndingsInDocument(textDocument, lineEndings, ref tmp, out numberOfIndividualChanges);
-                        Output(string.Format("{0}: changed {1} line endings\n", currentDocument.FullName, numberOfIndividualChanges));
+                        UnifyLineEndingsInDocument(textDocument, lineEndings, ref tmp, out numberOfIndividualChanges, out numberOfAllLineEndings);
+                        Output(string.Format("{0}: changed {1} out of {2} line endings\n", currentDocument.FullName, numberOfIndividualChanges, numberOfAllLineEndings));
                         Output("Done\n");
                     }
 
@@ -279,9 +280,10 @@ namespace JakubBielawa.LineEndingsUnifier
             if (document != null) 
             {
                 var numberOfIndividualChanges = 0;
+                var numberOfAllLineEndings = 0;
 
                 var textDocument = document.Object("TextDocument") as TextDocument;
-                UnifyLineEndingsInDocument(textDocument, lineEndings, ref numberOfChanges, out numberOfIndividualChanges);
+                UnifyLineEndingsInDocument(textDocument, lineEndings, ref numberOfChanges, out numberOfIndividualChanges, out numberOfAllLineEndings);
                 if (this.OptionsPage.SaveFilesAfterUnifying)
                 {
                     this.isUnifyingLocked = true;
@@ -289,7 +291,7 @@ namespace JakubBielawa.LineEndingsUnifier
                     this.isUnifyingLocked = false;
                 }
 
-                Output(string.Format("{0}: changed {1} line endings\n", document.FullName, numberOfIndividualChanges));
+                Output(string.Format("{0}: changed {1} out of {2} line endings\n", document.FullName, numberOfIndividualChanges, numberOfAllLineEndings));
             }
 
             if (documentWindow != null)
@@ -298,13 +300,13 @@ namespace JakubBielawa.LineEndingsUnifier
             }
         }
 
-        private void UnifyLineEndingsInDocument(TextDocument textDocument, LineEndingsChanger.LineEndings lineEndings, ref int numberOfChanges, out int numberOfIndividualChanges)
+        private void UnifyLineEndingsInDocument(TextDocument textDocument, LineEndingsChanger.LineEndings lineEndings, ref int numberOfChanges, out int numberOfIndividualChanges, out int numberOfAllLineEndings)
         {
             var startPoint = textDocument.StartPoint.CreateEditPoint();
             var endPoint = textDocument.EndPoint.CreateEditPoint();
 
             var text = startPoint.GetText(endPoint.AbsoluteCharOffset);
-            var changedText = LineEndingsChanger.ChangeLineEndings(text, lineEndings, ref numberOfChanges, out numberOfIndividualChanges);
+            var changedText = LineEndingsChanger.ChangeLineEndings(text, lineEndings, ref numberOfChanges, out numberOfIndividualChanges, out numberOfAllLineEndings);
             startPoint.ReplaceText(text.Length, changedText, (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers);
         }
 
