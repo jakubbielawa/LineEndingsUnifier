@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 namespace JakubBielawa.LineEndingsUnifier
 {
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [CLSCompliant(false), ComVisible(true)]
     public class OptionsPage : DialogPage
     {
         private LineEndingsChanger.LineEndingsList defaultLineEnding = LineEndingsChanger.LineEndingsList.Windows;

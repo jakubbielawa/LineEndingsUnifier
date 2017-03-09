@@ -47,7 +47,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             var button = sender as RadioButton;
-            
+
             if (button.Content.ToString().Contains("Windows"))
             {
                 this.lineEndings = LineEndingsChanger.LineEndings.Windows;

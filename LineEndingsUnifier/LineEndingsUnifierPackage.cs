@@ -21,7 +21,7 @@ namespace JakubBielawa.LineEndingsUnifier
         public LineEndingsUnifierPackage()
         {
         }
-        
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -30,7 +30,7 @@ namespace JakubBielawa.LineEndingsUnifier
             documentEvents.DocumentSaved += documentEvents_DocumentSaved;
 
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if ( null != mcs )
+            if (null != mcs)
             {
                 var menuCommandID = new CommandID(GuidList.guidLine_Endings_UnifierCmdSet_File, (int)PkgCmdIDList.cmdidUnifyLineEndings_File);
                 var menuItem = new MenuCommand(new EventHandler(UnifyLineEndingsInFileEventHandler), menuCommandID);
@@ -110,18 +110,18 @@ namespace JakubBielawa.LineEndingsUnifier
                 if (item.Name.EndsWithAny(supportedFileFormats) || item.Name.EqualsAny(supportedFileNames))
                 {
                     System.Threading.Tasks.Task.Run(() =>
-                        {
-                            Output("Unifying started...\n");
-                            var numberOfChanges = 0;
-                            var stopWatch = new Stopwatch();
-                            stopWatch.Start();
-                            UnifyLineEndingsInProjectItem(item, choiceWindow.LineEndings, ref numberOfChanges);
-                            stopWatch.Stop();
-                            var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
-                            VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
-                                OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-                            Output(string.Format("Done in {0} seconds\n", secondsElapsed));
-                        });
+                    {
+                        Output("Unifying started...\n");
+                        var numberOfChanges = 0;
+                        var stopWatch = new Stopwatch();
+                        stopWatch.Start();
+                        UnifyLineEndingsInProjectItem(item, choiceWindow.LineEndings, ref numberOfChanges);
+                        stopWatch.Stop();
+                        var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
+                        VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
+                            OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                        Output(string.Format("Done in {0} seconds\n", secondsElapsed));
+                    });
                 }
                 else
                 {
@@ -145,18 +145,18 @@ namespace JakubBielawa.LineEndingsUnifier
             if (choiceWindow.ShowDialog() == true && choiceWindow.LineEndings != LineEndingsChanger.LineEndings.None)
             {
                 System.Threading.Tasks.Task.Run(() =>
-                    {
-                        Output("Unifying started...\n");
-                        var numberOfChanges = 0;
-                        var stopWatch = new Stopwatch();
-                        stopWatch.Start();
-                        UnifyLineEndingsInProjectItems(projectItem.ProjectItems, choiceWindow.LineEndings, ref numberOfChanges);
-                        stopWatch.Stop();
-                        var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
-                        VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
-                                OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-                        Output(string.Format("Done in {0} seconds\n", secondsElapsed));
-                    });
+                {
+                    Output("Unifying started...\n");
+                    var numberOfChanges = 0;
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    UnifyLineEndingsInProjectItems(projectItem.ProjectItems, choiceWindow.LineEndings, ref numberOfChanges);
+                    stopWatch.Stop();
+                    var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
+                    VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
+                            OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                    Output(string.Format("Done in {0} seconds\n", secondsElapsed));
+                });
             }
         }
 
@@ -174,18 +174,18 @@ namespace JakubBielawa.LineEndingsUnifier
             if (choiceWindow.ShowDialog() == true && choiceWindow.LineEndings != LineEndingsChanger.LineEndings.None)
             {
                 System.Threading.Tasks.Task.Run(() =>
-                    {
-                        Output("Unifying started...\n");
-                        var numberOfChanges = 0;
-                        var stopWatch = new Stopwatch();
-                        stopWatch.Start();
-                        UnifyLineEndingsInProjectItems(selectedProject.ProjectItems, choiceWindow.LineEndings, ref numberOfChanges);
-                        stopWatch.Stop();
-                        var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
-                        VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
-                                OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-                        Output(string.Format("Done in {0} seconds\n", secondsElapsed));
-                    });
+                {
+                    Output("Unifying started...\n");
+                    var numberOfChanges = 0;
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    UnifyLineEndingsInProjectItems(selectedProject.ProjectItems, choiceWindow.LineEndings, ref numberOfChanges);
+                    stopWatch.Stop();
+                    var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
+                    VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
+                            OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                    Output(string.Format("Done in {0} seconds\n", secondsElapsed));
+                });
             }
         }
 
@@ -209,21 +209,21 @@ namespace JakubBielawa.LineEndingsUnifier
                         if (choiceWindow.ShowDialog() == true && choiceWindow.LineEndings != LineEndingsChanger.LineEndings.None)
                         {
                             System.Threading.Tasks.Task.Run(() =>
+                            {
+                                Output("Unifying started...\n");
+                                var stopWatch = new Stopwatch();
+                                stopWatch.Start();
+                                var numberOfChanges = 0;
+                                foreach (Project project in currentSolution.GetAllProjects())
                                 {
-                                    Output("Unifying started...\n");
-                                    var stopWatch = new Stopwatch();
-                                    stopWatch.Start();
-                                    var numberOfChanges = 0;
-                                    foreach (Project project in currentSolution.GetAllProjects())
-                                    {
-                                        UnifyLineEndingsInProjectItems(project.ProjectItems, choiceWindow.LineEndings, ref numberOfChanges);
-                                    }
-                                    stopWatch.Stop();
-                                    var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
-                                    VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
-                                        OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-                                    Output(string.Format("Done in {0} seconds\n", secondsElapsed));
-                                });
+                                    UnifyLineEndingsInProjectItems(project.ProjectItems, choiceWindow.LineEndings, ref numberOfChanges);
+                                }
+                                stopWatch.Stop();
+                                var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
+                                VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
+                                    OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                                Output(string.Format("Done in {0} seconds\n", secondsElapsed));
+                            });
                         }
                     }
                     else
@@ -275,9 +275,9 @@ namespace JakubBielawa.LineEndingsUnifier
                     documentWindow = item.Open();
                 }
             }
-            
+
             var document = item.Document;
-            if (document != null) 
+            if (document != null)
             {
                 var numberOfIndividualChanges = 0;
                 var numberOfAllLineEndings = 0;
@@ -324,7 +324,7 @@ namespace JakubBielawa.LineEndingsUnifier
             {
                 IVsOutputWindowPane outputWindowPane;
                 this.outputWindow.GetPane(ref this.guid, out outputWindowPane);
-            
+
                 outputWindowPane.OutputString(message);
             }
         }
