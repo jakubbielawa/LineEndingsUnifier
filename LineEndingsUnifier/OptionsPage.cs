@@ -15,6 +15,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private bool saveFilesAfterUnifying = false;
         private bool writeReport = false;
         private bool unifyOnlyOpenFiles = false;
+        private bool addNewlineOnLastLine = false;
 
         [Category("Line Endings Unifier")]
         [DisplayName("Default Line Ending")]
@@ -77,6 +78,15 @@ namespace JakubBielawa.LineEndingsUnifier
         {
             get { return unifyOnlyOpenFiles; }
             set { unifyOnlyOpenFiles = value; }
+        }
+
+        [Category("Line Endings Unifier")]
+        [DisplayName("Add Newline On The Last Line")]
+        [Description("Set this to TRUE if you want the extension to add a newline character on the last line when unifying line endings")]
+        public bool AddNewlineOnLastLine
+        {
+            get { return addNewlineOnLastLine; }
+            set { addNewlineOnLastLine = value; }
         }
     }
 }

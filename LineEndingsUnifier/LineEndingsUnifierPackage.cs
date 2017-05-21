@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -25,9 +26,6 @@ namespace JakubBielawa.LineEndingsUnifier
         protected override void Initialize()
         {
             base.Initialize();
-
-            documentEvents = IDE.Events.DocumentEvents;
-            documentEvents.DocumentSaved += documentEvents_DocumentSaved;
 
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != mcs)
@@ -58,10 +56,18 @@ namespace JakubBielawa.LineEndingsUnifier
             }
 
             SetupOutputWindow();
+
+            IServiceProvider serviceProvider = new ServiceProvider(IDE as Microsoft.VisualStudio.OLE.Interop.IServiceProvider);
+
+            runningDocumentTable = new RunningDocumentTable(serviceProvider);
+            documentSaveListener = new DocumentSaveListener(runningDocumentTable);
+            documentSaveListener.BeforeSave += DocumentSaveListener_BeforeSave;
         }
 
-        void documentEvents_DocumentSaved(Document document)
+        private int DocumentSaveListener_BeforeSave(uint docCookie)
         {
+            var document = GetDocumentFromDocCookie(docCookie);
+
             if (!this.isUnifyingLocked)
             {
                 if (this.OptionsPage.ForceDefaultLineEndingOnSave)
@@ -83,14 +89,12 @@ namespace JakubBielawa.LineEndingsUnifier
                         Output(string.Format("{0}: changed {1} out of {2} line endings\n", currentDocument.FullName, numberOfIndividualChanges, numberOfAllLineEndings));
                         Output("Done\n");
                     }
-
-                    this.isUnifyingLocked = true;
-                    document.Save();
-                    this.isUnifyingLocked = false;
                 }
             }
-        }
 
+            return VSConstants.S_OK;
+        }
+        
         private void UnifyLineEndingsInFileEventHandler(object sender, EventArgs e)
         {
             UnifyLineEndingsInFile();
@@ -254,12 +258,10 @@ namespace JakubBielawa.LineEndingsUnifier
                 {
                     UnifyLineEndingsInProjectItems(item.ProjectItems, lineEndings, ref numberOfChanges, saveAllWasHit);
                 }
-                else
+
+                if (item.Name.EndsWithAny(supportedFileFormats) || item.Name.EqualsAny(supportedFileNames))
                 {
-                    if (item.Name.EndsWithAny(supportedFileFormats) || item.Name.EqualsAny(supportedFileNames))
-                    {
-                        UnifyLineEndingsInProjectItem(item, lineEndings, ref numberOfChanges, saveAllWasHit);
-                    }
+                    UnifyLineEndingsInProjectItem(item, lineEndings, ref numberOfChanges, saveAllWasHit);
                 }
             }
         }
@@ -284,7 +286,7 @@ namespace JakubBielawa.LineEndingsUnifier
 
                 var textDocument = document.Object("TextDocument") as TextDocument;
                 UnifyLineEndingsInDocument(textDocument, lineEndings, ref numberOfChanges, out numberOfIndividualChanges, out numberOfAllLineEndings);
-                if (this.OptionsPage.SaveFilesAfterUnifying)
+                if (documentWindow != null || (documentWindow == null && this.OptionsPage.SaveFilesAfterUnifying))
                 {
                     this.isUnifyingLocked = true;
                     document.Save();
@@ -307,6 +309,15 @@ namespace JakubBielawa.LineEndingsUnifier
 
             var text = startPoint.GetText(endPoint.AbsoluteCharOffset);
             var changedText = LineEndingsChanger.ChangeLineEndings(text, lineEndings, ref numberOfChanges, out numberOfIndividualChanges, out numberOfAllLineEndings);
+
+            if (this.OptionsPage.AddNewlineOnLastLine)
+            {
+                if (!changedText.EndsWith(Utilities.GetNewlineString(lineEndings)))
+                {
+                    changedText += Utilities.GetNewlineString(lineEndings);
+                }
+            }
+
             startPoint.ReplaceText(text.Length, changedText, (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers);
         }
 
@@ -329,13 +340,21 @@ namespace JakubBielawa.LineEndingsUnifier
             }
         }
 
+        private Document GetDocumentFromDocCookie(uint docCookie)
+        {
+            var documentInfo = runningDocumentTable.GetDocumentInfo(docCookie);
+            return IDE.Documents.Cast<Document>().FirstOrDefault(doc => doc.FullName == documentInfo.Moniker);
+        }
+
         private bool isUnifyingLocked = false;
 
         private IVsOutputWindow outputWindow;
 
         private Guid guid;
 
-        private DocumentEvents documentEvents;
+        private RunningDocumentTable runningDocumentTable;
+
+        private DocumentSaveListener documentSaveListener;
 
         private LineEndingsChanger.LineEndings DefaultLineEnding
         {
