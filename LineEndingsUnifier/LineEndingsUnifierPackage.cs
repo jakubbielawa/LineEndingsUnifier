@@ -79,7 +79,7 @@ namespace JakubBielawa.LineEndingsUnifier
 
                     var supportedFileFormats = this.SupportedFileFormats;
                     var supportedFileNames = this.SupportedFileNames;
-
+                    
                     if (currentDocument.Name.EndsWithAny(supportedFileFormats) || currentDocument.Name.EqualsAny(supportedFileNames))
                     {
                         var numberOfIndividualChanges = 0;
@@ -110,7 +110,7 @@ namespace JakubBielawa.LineEndingsUnifier
             {
                 var supportedFileFormats = this.SupportedFileFormats;
                 var supportedFileNames = this.SupportedFileNames;
-
+                
                 if (item.Name.EndsWithAny(supportedFileFormats) || item.Name.EqualsAny(supportedFileNames))
                 {
                     System.Threading.Tasks.Task.Run(() =>
@@ -201,7 +201,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private void UnifyLineEndingsInSolution(bool askForLineEnding = true)
         {
             var currentSolution = this.IDE.Solution;
-
+            
             var properties = currentSolution.Properties;
             foreach (Property property in properties)
             {
@@ -251,7 +251,7 @@ namespace JakubBielawa.LineEndingsUnifier
         {
             var supportedFileFormats = this.SupportedFileFormats;
             var supportedFileNames = this.SupportedFileNames;
-
+            
             foreach (ProjectItem item in projectItems)
             {
                 if (item.ProjectItems != null && item.ProjectItems.Count > 0)
@@ -277,7 +277,7 @@ namespace JakubBielawa.LineEndingsUnifier
                     documentWindow = item.Open();
                 }
             }
-
+            
             var document = item.Document;
             if (document != null)
             {
@@ -363,12 +363,12 @@ namespace JakubBielawa.LineEndingsUnifier
 
         private string[] SupportedFileFormats
         {
-            get { return this.OptionsPage.SupportedFileFormats.Replace(" ", string.Empty).Split(new[] { ';' }); }
+            get { return this.OptionsPage.SupportedFileFormats.Replace(" ", string.Empty).Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries); }
         }
 
         private string[] SupportedFileNames
         {
-            get { return this.OptionsPage.SupportedFileNames.Replace(" ", string.Empty).Split(new[] { ';' }); }
+            get { return this.OptionsPage.SupportedFileNames.Replace(" ", string.Empty).Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries); }
         }
 
         private OptionsPage optionsPage;
