@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="1ce34aed-d80b-4e02-afc9-bd0bd3848443" Version="1.6.1" Language="en-US" Publisher="Jakub Bielawa" />
+    <Identity Id="1ce34aed-d80b-4e02-afc9-bd0bd3848443" Version="1.7" Language="en-US" Publisher="Jakub Bielawa" />
     <DisplayName>Line Endings Unifier</DisplayName>
     <Description xml:space="preserve">Unify line endings in a whole solution, a specific project, a chosen folder or a certain source file by right clicking on a solution, a project or a file in the Solution Explorer.</Description>
     <License>license.txt</License>

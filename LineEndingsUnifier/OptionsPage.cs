@@ -1,6 +1,8 @@
-﻿using Microsoft.VisualStudio.Shell;
-using System;
+﻿using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualStudio.Shell;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace JakubBielawa.LineEndingsUnifier
@@ -16,6 +18,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private bool writeReport = false;
         private bool unifyOnlyOpenFiles = false;
         private bool addNewlineOnLastLine = false;
+        private bool trackChanges = false;
 
         [Category("Line Endings Unifier")]
         [DisplayName("Default Line Ending")]
@@ -87,6 +90,31 @@ namespace JakubBielawa.LineEndingsUnifier
         {
             get { return addNewlineOnLastLine; }
             set { addNewlineOnLastLine = value; }
+        }
+
+        [Category("Line Endings Unifier")]
+        [DisplayName("Track Changes")]
+        [Description("Set this to TRUE if you want the extension to remember when files were unified to improve performance")]
+        public bool TrackChanges
+        {
+            get { return trackChanges; }
+            set
+            {
+                if (value == false)
+                {
+                    DTE2 ide = ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE2;
+                    if (!ide.Solution.FullName.Equals(string.Empty))
+                    {
+                        var path = Path.GetDirectoryName(ide.Solution.FullName) + "\\.leu";
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                        }
+                    }
+                }
+
+                trackChanges = value;
+            }
         }
     }
 }

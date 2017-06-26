@@ -51,8 +51,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ChangesTracker.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Guids.cs" />
+    <Compile Include="LastChanges.cs" />
     <Compile Include="LineEndingChoice.xaml.cs">
       <DependentUpon>LineEndingChoice.xaml</DependentUpon>
     </Compile>
@@ -63,6 +65,8 @@
     </Compile>
     <Compile Include="PkgCmdID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DocumentSaveListener.cs" />
+    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
@@ -191,7 +195,6 @@
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
