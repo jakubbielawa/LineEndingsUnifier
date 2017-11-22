@@ -19,6 +19,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private bool unifyOnlyOpenFiles = false;
         private bool addNewlineOnLastLine = false;
         private bool trackChanges = false;
+        private bool removeTrailingWhitespace = false;
 
         [Category("Line Endings Unifier")]
         [DisplayName("Default Line Ending")]
@@ -115,6 +116,15 @@ namespace JakubBielawa.LineEndingsUnifier
 
                 trackChanges = value;
             }
+        }
+
+        [Category("Line Endings Unifier")]
+        [DisplayName("Remove Trailing Whitespace")]
+        [Description("Set this to TRUE if you want the extension to remove trailing whitespace characters while unifying newline characters")]
+        public bool RemoveTrailingWhitespace
+        {
+            get { return removeTrailingWhitespace; }
+            set { removeTrailingWhitespace = value; }
         }
     }
 }

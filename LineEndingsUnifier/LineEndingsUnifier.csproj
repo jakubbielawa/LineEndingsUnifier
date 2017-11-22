@@ -66,6 +66,7 @@
     <Compile Include="PkgCmdID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DocumentSaveListener.cs" />
+    <Compile Include="TrailingWhitespaceRemover.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

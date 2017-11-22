@@ -81,7 +81,7 @@ namespace JakubBielawa.LineEndingsUnifier
 
                     var supportedFileFormats = this.SupportedFileFormats;
                     var supportedFileNames = this.SupportedFileNames;
-                    
+
                     if (currentDocument.Name.EndsWithAny(supportedFileFormats) || currentDocument.Name.EqualsAny(supportedFileNames))
                     {
                         var numberOfIndividualChanges = 0;
@@ -96,7 +96,7 @@ namespace JakubBielawa.LineEndingsUnifier
 
             return VSConstants.S_OK;
         }
-        
+
         private void UnifyLineEndingsInFileEventHandler(object sender, EventArgs e)
         {
             var selectedItem = this.IDE.SelectedItems.Item(1);
@@ -107,7 +107,7 @@ namespace JakubBielawa.LineEndingsUnifier
             {
                 var supportedFileFormats = this.SupportedFileFormats;
                 var supportedFileNames = this.SupportedFileNames;
-                
+
                 if (item.Name.EndsWithAny(supportedFileFormats) || item.Name.EqualsAny(supportedFileNames))
                 {
                     System.Threading.Tasks.Task.Run(() =>
@@ -192,7 +192,7 @@ namespace JakubBielawa.LineEndingsUnifier
         private void UnifyLineEndingsInSolutionEventHandler(object sender, EventArgs e)
         {
             var currentSolution = this.IDE.Solution;
-            
+
             var properties = currentSolution.Properties;
             foreach (Property property in properties)
             {
@@ -230,7 +230,7 @@ namespace JakubBielawa.LineEndingsUnifier
         {
             var supportedFileFormats = this.SupportedFileFormats;
             var supportedFileNames = this.SupportedFileNames;
-            
+
             foreach (ProjectItem item in projectItems)
             {
                 if (item.ProjectItems != null && item.ProjectItems.Count > 0)
@@ -262,9 +262,9 @@ namespace JakubBielawa.LineEndingsUnifier
             {
                 var numberOfIndividualChanges = 0;
                 var numberOfAllLineEndings = 0;
-                
-                if (!this.OptionsPage.TrackChanges || 
-                    (this.OptionsPage.TrackChanges && this.changeLog != null && (!this.changeLog.ContainsKey(document.FullName) || 
+
+                if (!this.OptionsPage.TrackChanges ||
+                    (this.OptionsPage.TrackChanges && this.changeLog != null && (!this.changeLog.ContainsKey(document.FullName) ||
                                                                                  this.changeLog[document.FullName].LineEndings != lineEndings ||
                                                                                  this.changeLog[document.FullName].Ticks < File.GetLastWriteTime(document.FullName).Ticks)))
                 {
@@ -299,6 +299,10 @@ namespace JakubBielawa.LineEndingsUnifier
             var endPoint = textDocument.EndPoint.CreateEditPoint();
 
             var text = startPoint.GetText(endPoint.AbsoluteCharOffset);
+            if (this.OptionsPage.RemoveTrailingWhitespace)
+            {
+                text = TrailingWhitespaceRemover.RemoveTrailingWhitespace(text);
+            }
             var changedText = LineEndingsChanger.ChangeLineEndings(text, lineEndings, ref numberOfChanges, out numberOfIndividualChanges, out numberOfAllLineEndings);
 
             if (this.OptionsPage.AddNewlineOnLastLine)
