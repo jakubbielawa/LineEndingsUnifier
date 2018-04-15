@@ -299,6 +299,7 @@ namespace JakubBielawa.LineEndingsUnifier
             var endPoint = textDocument.EndPoint.CreateEditPoint();
 
             var text = startPoint.GetText(endPoint.AbsoluteCharOffset);
+            var originalLength = text.Length;
             if (this.OptionsPage.RemoveTrailingWhitespace)
             {
                 text = TrailingWhitespaceRemover.RemoveTrailingWhitespace(text);
@@ -313,7 +314,7 @@ namespace JakubBielawa.LineEndingsUnifier
                 }
             }
 
-            startPoint.ReplaceText(text.Length, changedText, (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers);
+            startPoint.ReplaceText(originalLength, changedText, (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers);
         }
 
         private void SetupOutputWindow()
