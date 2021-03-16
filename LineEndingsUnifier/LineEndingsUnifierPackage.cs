@@ -9,26 +9,34 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
+using Task = System.Threading.Tasks.Task;
 
 namespace JakubBielawa.LineEndingsUnifier
 {
-    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(GuidList.guidLine_Endings_UnifierPkgString)]
     [ProvideOptionPage(typeof(OptionsPage), "Line Endings Unifier", "General Settings", 0, 0, true)]
-    [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
-    public sealed class LineEndingsUnifierPackage : Package
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string, PackageAutoLoadFlags.BackgroundLoad)]
+    public sealed class LineEndingsUnifierAsyncPackage: AsyncPackage
     {
-        public LineEndingsUnifierPackage()
+        public LineEndingsUnifierAsyncPackage()
         {
         }
 
-        protected override void Initialize()
+        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            base.Initialize();
+            // runs in the background thread and doesn't affect the responsiveness of the UI thread.
+            await Task.Delay(5000);
 
-            var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            await base.InitializeAsync(cancellationToken, progress);
+
+            // Switches to the UI thread in order to consume some services used in command initialization
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+            var mcs = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != mcs)
             {
                 var menuCommandID = new CommandID(GuidList.guidLine_Endings_UnifierCmdSet_File, (int)PkgCmdIDList.cmdidUnifyLineEndings_File);
@@ -122,15 +130,11 @@ namespace JakubBielawa.LineEndingsUnifier
                         var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
                         this.changesManager.SaveLastChanges(this.IDE.Solution, this.changeLog);
                         this.changeLog = null;
-                        VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
-                            OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
                         Output(string.Format("Done in {0} seconds\n", secondsElapsed));
                     });
                 }
                 else
                 {
-                    VsShellUtilities.ShowMessageBox(this, "This is not a valid source file!", "Error",
-                        OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
                 }
             }
         }
@@ -155,8 +159,6 @@ namespace JakubBielawa.LineEndingsUnifier
                     var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
                     this.changesManager.SaveLastChanges(this.IDE.Solution, this.changeLog);
                     this.changeLog = null;
-                    VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
-                            OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
                     Output(string.Format("Done in {0} seconds\n", secondsElapsed));
                 });
             }
@@ -182,8 +184,6 @@ namespace JakubBielawa.LineEndingsUnifier
                     var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
                     this.changesManager.SaveLastChanges(this.IDE.Solution, this.changeLog);
                     this.changeLog = null;
-                    VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
-                            OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
                     Output(string.Format("Done in {0} seconds\n", secondsElapsed));
                 });
             }
@@ -216,8 +216,6 @@ namespace JakubBielawa.LineEndingsUnifier
                             var secondsElapsed = stopWatch.ElapsedMilliseconds / 1000.0;
                             this.changesManager.SaveLastChanges(this.IDE.Solution, this.changeLog);
                             this.changeLog = null;
-                            VsShellUtilities.ShowMessageBox(this, string.Format("Successfully changed {0} line endings in {1} seconds!", numberOfChanges, secondsElapsed), "Success",
-                                OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
                             Output(string.Format("Done in {0} seconds\n", secondsElapsed));
                         });
                     }
