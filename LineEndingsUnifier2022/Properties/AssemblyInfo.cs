@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("LineEndingsUnifier2022")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Jakub Bielawa")]
 [assembly: AssemblyProduct("LineEndingsUnifier2022")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
