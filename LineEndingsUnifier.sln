@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineEndingsUnifier", "LineEndingsUnifier\LineEndingsUnifier.csproj", "{4AFFFFFE-B247-463F-8C0F-A72A86332BA0}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LineEndingsUnifierShared", "LineEndingsUnifierShared\LineEndingsUnifierShared.shproj", "{7C88DA04-FCF3-4D63-964B-FAC8C8E56E3D}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		LineEndingsUnifierShared\LineEndingsUnifierShared.projitems*{4afffffe-b247-463f-8c0f-a72a86332ba0}*SharedItemsImports = 4
+		LineEndingsUnifierShared\LineEndingsUnifierShared.projitems*{7c88da04-fcf3-4d63-964b-fac8c8e56e3d}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -18,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F368787F-5C10-4A7D-878D-DCCAF12FCE30}
 	EndGlobalSection
 EndGlobal
